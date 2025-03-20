@@ -209,10 +209,12 @@
 
         .chart-container {
             width: 100%;
-            height: 300px;
+            height: 220px; /* Reduced from 300px to 220px */
             display: flex;
             justify-content: center;
             position: relative;
+            margin: 0 auto; /* Added centering */
+            max-width: 300px; /* Added maximum width */
         }
 
         .wallet-info {
@@ -442,7 +444,7 @@
                 balance: 100,
                 invested: 444666,
                 avgPrice: 4446.66,
-                currentPrice: 4640,
+                currentPrice: 4620,
                 currency: "IDR"
             },
             {
@@ -608,7 +610,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '70%',
+                    cutout: '65%', // Reduced from 70% to make the donut thicker
                     plugins: {
                         legend: {
                             display: false
