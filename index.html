@@ -35,30 +35,18 @@
             position: relative;
             margin-top: 20px;
         }
-        
+
         .header-section {
             text-align: center;
             margin-bottom: 20px;
             width: 100%;
         }
-        
-        .greeting {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        
-        .motto {
-            font-size: 18px;
-            font-weight: 600;
-            font-style: italic;
-            margin-bottom: 15px;
-        }
-        
+
         .last-update {
             font-size: 14px;
             color: #666666;
-            margin-top: 5px;
+            margin-top: 20px;
+            text-align: center;
         }
 
         .page-title {
@@ -121,7 +109,7 @@
 
         .distribution-table {
             width: 100%;
-            min-width: 600px; /* Ensures table doesn't shrink too much */
+            min-width: 600px;
             border-collapse: collapse;
         }
 
@@ -228,14 +216,6 @@
             .total-assets {
                 font-size: 38px;
             }
-            
-            .greeting {
-                font-size: 24px;
-            }
-            
-            .motto {
-                font-size: 16px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -260,26 +240,11 @@
                 width: 22px;
                 height: 22px;
             }
-            
-            .greeting {
-                font-size: 22px;
-            }
-            
-            .motto {
-                font-size: 14px;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Header Section -->
-        <div class="header-section">
-            <div class="greeting">Hallo, Mr M. Kaspul Anwar</div>
-            <div class="motto">"You Can't Hold, You Won't Be Rich"</div>
-            <div class="last-update">Last Update: March 20, 2025</div>
-        </div>
-        
         <!-- Total Asset Card -->
         <div class="card">
             <div class="card-header">
@@ -290,6 +255,8 @@
             <div class="total-assets-container">
                 <div class="total-assets">Rp. 1.730.176,00</div>
             </div>
+            
+            <div class="last-update">Last Update: March 20, 2025</div>
             
             <div class="summary-card">
                 <div class="summary-title">Ringkasan Portfolio</div>
@@ -344,7 +311,7 @@
                             <td>Rp. 374.955</td>
                             <td>$ 91.047,04</td>
                             <td>Rp. 374.955</td>
-                            <td class="negative">- 20% </td>
+                            <td class="negative">- 20%</td>
                         </tr>
                         <tr>
                             <td>
