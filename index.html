@@ -140,26 +140,9 @@
         }
 
         .asset-name {
-            display: inline-flex;
-            flex-direction: column;
+            display: inline-block;
             vertical-align: middle;
             font-weight: 500;
-        }
-
-        .asset-ticker {
-            font-weight: 600;
-            font-size: 14px;
-            color: #000000;
-        }
-
-        .asset-company {
-            font-weight: 400;
-            font-size: 12px;
-            color: #666666;
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
         }
 
         .summary-card {
@@ -212,10 +195,6 @@
             .total-assets {
                 font-size: 38px;
             }
-            
-            .asset-company {
-                max-width: 150px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -240,10 +219,6 @@
                 width: 22px;
                 height: 22px;
             }
-            
-            .asset-company {
-                max-width: 120px;
-            }
         }
     </style>
 </head>
@@ -265,11 +240,11 @@
                 <div class="summary-stats">
                     <div class="stat-item">
                         <span class="stat-label">Total Invested</span>
-                        <span class="stat-value">0%</span>
+                        <span class="stat-value">Rp. 1.730.176</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Return Assets (YoY)</span>
-                        <span class="stat-value">0%</span>
+                        <span class="stat-value">10%</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Tingkat Risiko</span>
@@ -297,8 +272,8 @@
                             <th>Jumlah</th>
                             <th>Invested</th>
                             <th>Market Value</th>
-                            <th>Nilai</th>
-                            <th>Type</th>
+                            <th>Return (YoY)</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -307,64 +282,51 @@
                                 <span class="asset-icon">
                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1024px-Bitcoin.svg.png" alt="Bitcoin">
                                 </span>
-                                <span class="asset-name">
-                                    <span class="asset-ticker">BTC</span>
-                                    <span class="asset-company">Bitcoin</span>
-                                </span>
+                                <span class="asset-name">Bitcoin</span>
                             </td>
                             <td>24.997 sats</td>
-                            <td>Rp. 350.000</td>
                             <td>Rp. 374.955</td>
-                            <td>Rp. 374.955</td>
-                            <td>Crypto</td>
+                            <td></td>
+                            <td> 103,49%</td>
                         </tr>
                         <tr>
                             <td>
                                 <span class="asset-icon">
                                     <img src="https://assets.stockbit.com/logos/companies/ADRO.png" alt="Adaro">
                                 </span>
-                                <span class="asset-name">
-                                    <span class="asset-ticker">IDX: ADRO</span>
-                                    <span class="asset-company">Adaro Energy Indonesia Tbk PT</span>
-                                </span>
+                                <span class="asset-name">IDX: ADRO</span>
                             </td>
                             <td>300 lembar</td>
                             <td>Rp. 525.000</td>
                             <td>Rp. 540.309</td>
-                            <td>Rp. 540.309</td>
-                            <td>Saham</td>
+                            <td>20% (Dividen)</td>
+                            
                         </tr>
                         <tr>
                             <td>
                                 <span class="asset-icon">
                                     <img src="https://assets.stockbit.com/logos/companies/BMRI.png" alt="Mandiri">
                                 </span>
-                                <span class="asset-name">
-                                    <span class="asset-ticker">IDX: BMRI</span>
-                                    <span class="asset-company">Bank Mandiri (Persero) Tbk PT</span>
-                                </span>
+                                <span class="asset-name">IDX: BMRI</span>
                             </td>
                             <td>100 lembar</td>
                             <td>Rp. 430.000</td>
                             <td>Rp. 444.666</td>
-                            <td>Rp. 444.666</td>
-                            <td>Saham</td>
+                            <td>7% (Dividen)</td>
+                           
                         </tr>
                         <tr>
                             <td>
                                 <span class="asset-icon">
                                     <img src="https://assets.stockbit.com/logos/companies/IPCC.png?version=1730190669123413796" alt="IPCC">
                                 </span>
-                                <span class="asset-name">
-                                    <span class="asset-ticker">IDX: IPCC</span>
-                                    <span class="asset-company">Indonesia Kendaraan Terminal Tbk PT</span>
-                                </span>
+                                <span class="asset-name">IDX: IPCC</span>
                             </td>
                             <td>500 lembar</td>
                             <td>Rp. 350.000</td>
                             <td>Rp. 370.555</td>
-                            <td>Rp. 370.555</td>
-                            <td>Saham</td>
+                            <td>14% (Dividen)</td>
+                            
                         </tr>
                     </tbody>
                 </table>
