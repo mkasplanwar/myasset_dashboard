@@ -109,7 +109,7 @@
 
         .distribution-table {
             width: 100%;
-            min-width: 600px;
+            min-width: 750px;
             border-collapse: collapse;
         }
 
@@ -197,11 +197,11 @@
         }
         
         .positive {
-            color: #28a745;
+            color: #28a745 !important;
         }
         
         .negative {
-            color: #dc3545;
+            color: #dc3545 !important;
         }
 
         @media (max-width: 768px) {
@@ -253,29 +253,29 @@
             </div>
             
             <div class="total-assets-container">
-                <div class="total-assets">Rp. 1.730.176,00</div>
+                <div class="total-assets" id="totalEquity">Rp. 0</div>
             </div>
             
-            <div class="last-update">Last Update: March 20, 2025</div>
+            <div class="last-update">Last Update: <span id="lastUpdateDate"></span></div>
             
             <div class="summary-card">
                 <div class="summary-title">Ringkasan Portfolio</div>
                 <div class="summary-stats">
                     <div class="stat-item">
                         <span class="stat-label">Invested</span>
-                        <span class="stat-value">Rp. 1.730.176</span>
+                        <span class="stat-value" id="totalInvested">Rp. 0</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Percentage</span>
-                        <span class="stat-value positive">+ 10%</span>
+                        <span class="stat-value" id="totalPercentage">0%</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-label">Potential P&L</span>
-                        <span class="stat-value positive">+ Rp. 10.000</span>
+                        <span class="stat-label">Unrealized P&L</span>
+                        <span class="stat-value" id="totalPnL">Rp. 0</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-label">Total Assets</span>
-                        <span class="stat-value">4</span>
+                        <span class="stat-value" id="totalAssets">0</span>
                     </div>
                 </div>
             </div>
@@ -295,67 +295,185 @@
                             <th>Balance</th>
                             <th>Invested</th>
                             <th>Avg Price</th>
+                            <th>Current Price</th>
                             <th>Market Value</th>
                             <th>Return (%)</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <span class="asset-icon">
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1024px-Bitcoin.svg.png" alt="Bitcoin">
-                                </span>
-                                <span class="asset-name">Bitcoin</span>
-                            </td>
-                            <td>24.997 sats</td>
-                            <td>Rp. 374.955</td>
-                            <td>$ 91.047,04</td>
-                            <td>Rp. 374.955</td>
-                            <td class="negative">- 20%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="asset-icon">
-                                    <img src="https://assets.stockbit.com/logos/companies/ADRO.png" alt="Adaro">
-                                </span>
-                                <span class="asset-name">IDX: ADRO</span>
-                            </td>
-                            <td>300 lembar</td>
-                            <td>Rp. 540.309</td>
-                            <td>Rp. 1.801,03</td>
-                            <td>Rp. 540.309</td>
-                            <td class="negative">- 10%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="asset-icon">
-                                    <img src="https://assets.stockbit.com/logos/companies/BMRI.png" alt="Mandiri">
-                                </span>
-                                <span class="asset-name">IDX: BMRI</span>
-                            </td>
-                            <td>100 lembar</td>
-                            <td>Rp. 444.666</td>
-                            <td>Rp. 4.446,66</td>
-                            <td>Rp. 444.666</td>
-                            <td>0%</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="asset-icon">
-                                    <img src="https://assets.stockbit.com/logos/companies/IPCC.png?version=1730190669123413796" alt="IPCC">
-                                </span>
-                                <span class="asset-name">IDX: IPCC</span>
-                            </td>
-                            <td>500 lembar</td>
-                            <td>Rp. 370.555</td>
-                            <td>Rp. 741,11</td>
-                            <td>Rp. 370.555</td>
-                            <td class="positive">+ 1%</td>
-                        </tr>
+                    <tbody id="assetTableBody">
+                        <!-- Assets will be inserted here by JavaScript -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+
+    <script>
+        // Asset data
+        const assets = [
+            {
+                name: "Bitcoin",
+                icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1024px-Bitcoin.svg.png",
+                balance: 0.00024997,
+                invested: 374955,
+                avgPrice: 1500000000, // Harga dalam Rupiah, dikonversi dari USD
+                currentPrice: 1341254000,  // Harga dalam Rupiah, dikonversi dari USD
+                currency: "IDR"  // Diubah menjadi IDR
+            },
+            {
+                name: "IDX: ADRO",
+                icon: "https://assets.stockbit.com/logos/companies/ADRO.png",
+                balance: 300,
+                invested: 540309,
+                avgPrice: 1801.03,
+                currentPrice: 1795,
+                currency: "IDR"
+            },
+            {
+                name: "IDX: BMRI",
+                icon: "https://assets.stockbit.com/logos/companies/BMRI.png",
+                balance: 100,
+                invested: 444666,
+                avgPrice: 4446.66,
+                currentPrice: 4640,
+                currency: "IDR"
+            },
+            {
+                name: "IDX: IPCC",
+                icon: "https://assets.stockbit.com/logos/companies/IPCC.png?version=1730190669123413796",
+                balance: 500,
+                invested: 370555,
+                avgPrice: 741.11,
+                currentPrice: 740,
+                currency: "IDR"
+            }
+        ];
+
+        // Format currency
+        function formatCurrency(amount) {
+            return 'Rp. ' + amount.toLocaleString('id-ID', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            });
+        }
+
+        // Calculate market value and return for each asset
+        function calculateAssetValues() {
+            return assets.map(asset => {
+                const marketValue = asset.balance * asset.currentPrice;
+                const returnPercent = ((marketValue - asset.invested) / asset.invested) * 100;
+                
+                return {
+                    ...asset,
+                    marketValue: Math.round(marketValue),
+                    returnPercent: returnPercent
+                };
+            });
+        }
+
+        // Populate asset table
+        function populateAssetTable() {
+            const tableBody = document.getElementById('assetTableBody');
+            tableBody.innerHTML = '';
+            
+            const calculatedAssets = calculateAssetValues();
+            
+            calculatedAssets.forEach(asset => {
+                const row = document.createElement('tr');
+                
+                // Format return class
+                const returnClass = asset.returnPercent > 0 ? 'positive' : 
+                                    asset.returnPercent < 0 ? 'negative' : '';
+                                    
+                // Format return sign
+                const returnSign = asset.returnPercent > 0 ? '+ ' : 
+                                  asset.returnPercent < 0 ? '- ' : '';
+                
+                // Tentukan format tampilan untuk harga berdasarkan apakah itu Bitcoin atau aset lain
+                let currentPriceDisplay, avgPriceDisplay;
+                
+                if (asset.name === "Bitcoin") {
+                    // Format untuk Bitcoin (dalam jutaan rupiah)
+                    currentPriceDisplay = `Rp. ${(asset.currentPrice / 1000000).toLocaleString('id-ID', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })} jt`;
+                    
+                    avgPriceDisplay = `Rp. ${(asset.avgPrice / 1000000).toLocaleString('id-ID', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })} jt`;
+                } else {
+                    // Format untuk aset lain (dalam rupiah normal)
+                    currentPriceDisplay = `Rp. ${asset.currentPrice.toLocaleString('id-ID', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}`;
+                    
+                    avgPriceDisplay = `Rp. ${asset.avgPrice.toLocaleString('id-ID', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}`;
+                }
+                
+                row.innerHTML = `
+                    <td>
+                        <span class="asset-icon">
+                            <img src="${asset.icon}" alt="${asset.name}">
+                        </span>
+                        <span class="asset-name">${asset.name}</span>
+                    </td>
+                    <td>${asset.balance.toLocaleString('id-ID', { minimumFractionDigits: asset.name === "Bitcoin" ? 8 : 0 })}</td>
+                    <td>${formatCurrency(asset.invested)}</td>
+                    <td>${avgPriceDisplay}</td>
+                    <td>${currentPriceDisplay}</td>
+                    <td>${formatCurrency(asset.marketValue)}</td>
+                    <td class="${returnClass}">${returnSign}${Math.abs(asset.returnPercent).toFixed(2)}%</td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+            
+            return calculatedAssets;
+        }
+
+        // Calculate and display portfolio summary
+        function updatePortfolioSummary(calculatedAssets) {
+            const totalInvested = calculatedAssets.reduce((sum, asset) => sum + asset.invested, 0);
+            const totalMarketValue = calculatedAssets.reduce((sum, asset) => sum + asset.marketValue, 0);
+            const totalPnL = totalMarketValue - totalInvested;
+            const totalPercentage = (totalPnL / totalInvested) * 100;
+            
+            // Update summary values
+            document.getElementById('totalEquity').textContent = formatCurrency(totalMarketValue);
+            document.getElementById('totalInvested').textContent = formatCurrency(totalInvested);
+            document.getElementById('totalPnL').textContent = `${totalPnL >= 0 ? '+ ' : '- '}${formatCurrency(Math.abs(totalPnL))}`;
+            document.getElementById('totalAssets').textContent = calculatedAssets.length;
+            
+            const percentageElement = document.getElementById('totalPercentage');
+            percentageElement.textContent = `${totalPercentage >= 0 ? '+ ' : '- '}${Math.abs(totalPercentage).toFixed(2)}%`;
+            percentageElement.className = 'stat-value ' + (totalPercentage >= 0 ? 'positive' : 'negative');
+            
+            const pnlElement = document.getElementById('totalPnL');
+            pnlElement.className = 'stat-value ' + (totalPnL >= 0 ? 'positive' : 'negative');
+        }
+
+        // Set the current date
+        function setCurrentDate() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('lastUpdateDate').textContent = now.toLocaleDateString('id-ID', options);
+        }
+
+        // Initialize the portfolio tracker
+        function initializePortfolio() {
+            setCurrentDate();
+            const calculatedAssets = populateAssetTable();
+            updatePortfolioSummary(calculatedAssets);
+        }
+
+        // Run on page load
+        document.addEventListener('DOMContentLoaded', initializePortfolio);
+    </script>
 </body>
 </html>
