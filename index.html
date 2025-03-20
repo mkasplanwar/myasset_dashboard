@@ -6,7 +6,7 @@
     <title>Portfolio Aset Pribadi</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -208,35 +208,59 @@
 
         .chart-container {
             width: 100%;
-            max-width: 400px;
-            margin: 0 auto;
             height: 300px;
+            display: flex;
+            justify-content: center;
             position: relative;
         }
 
         .wallet-info {
-            margin-top: 20px;
+            margin-top: 10px;
             padding: 20px;
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
             border-radius: 8px;
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
         }
 
         .wallet-address {
             font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
             padding: 10px;
             background: #f0f0f0;
             border-radius: 4px;
-            word-break: break-all;
             margin-top: 10px;
-            font-size: 14px;
+            border: 1px solid #e0e0e0;
         }
 
-        .qr-code {
-            margin: 20px auto;
-            display: block;
-            width: 150px;
-            height: 150px;
+        .wallet-type {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .donut-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .legend-text {
+            font-size: 12px;
         }
 
         @media (max-width: 768px) {
@@ -342,14 +366,17 @@
             </div>
         </div>
 
-        <!-- Pie Chart Card -->
+        <!-- Donut Chart Card -->
         <div class="card">
             <div class="card-header">
-                <i class="fas fa-chart-pie"></i>
-                <span class="title">Distribusi Portfolio</span>
+                <i class="fas fa-chart-donut"></i>
+                <span class="title">Visualisasi Distribusi Aset</span>
             </div>
             <div class="chart-container">
-                <canvas id="portfolioChart"></canvas>
+                <canvas id="donutChart"></canvas>
+            </div>
+            <div class="donut-legend" id="donutLegend">
+                <!-- Legend items will be inserted here by JavaScript -->
             </div>
         </div>
 
@@ -357,13 +384,12 @@
         <div class="card">
             <div class="card-header">
                 <i class="fab fa-bitcoin"></i>
-                <span class="title">Bitcoin Wallet</span>
+                <span class="title">Informasi Wallet Bitcoin</span>
             </div>
             <div class="wallet-info">
-                <div class="summary-title">Address</div>
+                <div class="summary-title">Alamat Wallet</div>
                 <div class="wallet-address">bc1qn9fn2z22rdtuy66ta3p2he2pdhtvvkucunljgh</div>
-                <div class="stat-label" style="margin-top: 10px;">Address Type: SegWit (Bech32)</div>
-                <img src="qr-code.png" alt="BTC Wallet QR Code" class="qr-code">
+                <div class="wallet-type">Tipe Alamat: Native SegWit (bech32)</div>
             </div>
         </div>
     </div>
@@ -526,56 +552,74 @@
             const pnlElement = document.getElementById('totalPnL');
             pnlElement.className = 'stat-value ' + (totalPnL >= 0 ? 'positive' : 'negative');
             
-            return { totalMarketValue };
+            return { totalMarketValue, totalInvested };
         }
 
-        // Create portfolio distribution chart
-        function createPortfolioChart(calculatedAssets) {
-            const ctx = document.getElementById('portfolioChart').getContext('2d');
+        // Create donut chart
+        function createDonutChart(calculatedAssets) {
+            const ctx = document.getElementById('donutChart').getContext('2d');
             
-            // Prepare data for chart
-            const labels = calculatedAssets.map(asset => asset.name);
+            // Calculate percentages for the chart
+            const totalValue = calculatedAssets.reduce((sum, asset) => sum + asset.marketValue, 0);
             const data = calculatedAssets.map(asset => asset.marketValue);
-            const totalValue = data.reduce((sum, value) => sum + value, 0);
-            const percentages = data.map(value => ((value / totalValue) * 100).toFixed(1));
+            const labels = calculatedAssets.map(asset => asset.name);
             
-            // Generate colors
-            const backgroundColors = [
-                'rgba(255, 99, 132, 0.7)',
-                'rgba(54, 162, 235, 0.7)',
-                'rgba(255, 206, 86, 0.7)',
-                'rgba(75, 192, 192, 0.7)',
-                'rgba(153, 102, 255, 0.7)',
-                'rgba(255, 159, 64, 0.7)'
+            // Create colors for the chart
+            const colors = [
+                'rgba(54, 162, 235, 0.8)',  // Blue for Bitcoin
+                'rgba(255, 159, 64, 0.8)',  // Orange for ADRO
+                'rgba(75, 192, 192, 0.8)',  // Teal for BMRI
+                'rgba(153, 102, 255, 0.8)'  // Purple for IPCC
             ];
             
-            // Create chart
-            const portfolioChart = new Chart(ctx, {
-                type: 'pie',
+            // Create the chart
+            const donutChart = new Chart(ctx, {
+                type: 'doughnut',
                 data: {
-                    labels: labels.map((label, i) => `${label} (${percentages[i]}%)`),
+                    labels: labels,
                     datasets: [{
                         data: data,
-                        backgroundColor: backgroundColors.slice(0, calculatedAssets.length),
+                        backgroundColor: colors,
+                        borderColor: colors.map(color => color.replace('0.8', '1')),
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    cutout: '70%',
                     plugins: {
                         legend: {
-                            position: 'bottom',
-                            labels: {
-                                font: {
-                                    family: 'Montserrat',
-                                    size: 12
-                                },
-                                padding: 10
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const percentage = ((value / totalValue) * 100).toFixed(1);
+                                    return `${context.label}: ${formatCurrency(value)} (${percentage}%)`;
+                                }
                             }
                         }
                     }
                 }
+            });
+            
+            // Create custom legend
+            const legendContainer = document.getElementById('donutLegend');
+            legendContainer.innerHTML = '';
+            
+            calculatedAssets.forEach((asset, index) => {
+                const percentage = ((asset.marketValue / totalValue) * 100).toFixed(1);
+                const legendItem = document.createElement('div');
+                legendItem.className = 'legend-item';
+                
+                legendItem.innerHTML = `
+                    <div class="legend-color" style="background-color: ${colors[index]}"></div>
+                    <div class="legend-text">${asset.name}: ${percentage}%</div>
+                `;
+                
+                legendContainer.appendChild(legendItem);
             });
         }
 
@@ -591,7 +635,7 @@
             setCurrentDate();
             const calculatedAssets = populateAssetTable();
             updatePortfolioSummary(calculatedAssets);
-            createPortfolioChart(calculatedAssets);
+            createDonutChart(calculatedAssets);
         }
 
         // Run on page load
