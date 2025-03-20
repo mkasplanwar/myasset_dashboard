@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -263,6 +264,20 @@
             font-size: 12px;
         }
 
+        .qr-code-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .wallet-qr {
+            background-color: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -390,6 +405,12 @@
                 <div class="summary-title">Alamat Wallet</div>
                 <div class="wallet-address">bc1qn9fn2z22rdtuy66ta3p2he2pdhtvvkucunljgh</div>
                 <div class="wallet-type">Tipe Alamat: Native SegWit (bech32)</div>
+                
+                <!-- QR Code Container -->
+                <div class="summary-title" style="margin-top: 20px;">QR Code</div>
+                <div class="qr-code-container">
+                    <div id="walletQR" class="wallet-qr"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -629,6 +650,22 @@
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             document.getElementById('lastUpdateDate').textContent = now.toLocaleDateString('id-ID', options);
         }
+        
+        // Generate QR Code for wallet address
+        function generateQRCode() {
+            const walletAddress = "bc1qn9fn2z22rdtuy66ta3p2he2pdhtvvkucunljgh";
+            const qrCodeElement = document.getElementById('walletQR');
+            
+            // Create QR code with options
+            new QRCode(qrCodeElement, {
+                text: walletAddress,
+                width: 160,
+                height: 160,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
 
         // Initialize the portfolio tracker
         function initializePortfolio() {
@@ -636,6 +673,7 @@
             const calculatedAssets = populateAssetTable();
             updatePortfolioSummary(calculatedAssets);
             createDonutChart(calculatedAssets);
+            generateQRCode();
         }
 
         // Run on page load
