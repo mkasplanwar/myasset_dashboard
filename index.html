@@ -174,18 +174,15 @@
             margin-right: 15px;
             background-color: #ffffff;
             vertical-align: middle;
-            box-shadow: 
-                0 2px 4px rgba(0, 0, 0, 0.1),
-                inset 0 1px 3px rgba(0, 0, 0, 0.05);
-            border: 1px solid #000000;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
             overflow: hidden; /* Ensure the image is contained within the circle */
         }
 
         .asset-icon img {
-            width: 32px; /* Increased from 26px for higher resolution */
-            height: 32px; /* Increased from 26px for higher resolution */
-            object-fit: cover; /* Changed from contain to cover for better circle filling */
-            border-radius: 50%; /* Make the image itself circular */
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 50%;
         }
 
         .asset-name {
@@ -293,7 +290,7 @@
             width: 12px;
             height: 12px;
             border-radius: 2px;
-            border: 1px solid #000000;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
         .legend-text {
@@ -314,6 +311,26 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
+        /* Horizontal divider for summary sections */
+        .divider {
+            height: 1px;
+            background-color: #e0e0e0;
+            margin: 15px 0;
+            width: 100%;
+        }
+
+        /* Status indicator for DER */
+        .status-indicator {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+            background-color: #28a745;
+            color: white;
+        }
+
         @media (max-width: 768px) {
             .container,
             .top-row {
@@ -329,22 +346,22 @@
             }
             
             .container {
-                gap: 15px; /* Slightly increased gap between cards */
-                padding: 0 5px; /* Added padding to container */
+                gap: 15px;
+                padding: 0 5px;
             }
             
             .card {
-                margin-bottom: 15px; /* Adjusted margin between cards */
-                padding: 20px; /* Increased padding inside cards for more space */
+                margin-bottom: 15px;
+                padding: 20px;
             }
             
             .header-section {
-                margin-bottom: 15px; /* Adjusted margin */
-                padding: 20px; /* Increased padding */
+                margin-bottom: 15px;
+                padding: 20px;
             }
             
             body {
-                padding: 15px; /* Increased padding from sides */
+                padding: 15px;
             }
         }
 
@@ -367,37 +384,37 @@
             }
             
             .asset-icon img {
-                width: 28px; /* Slightly reduced but still larger than original */
+                width: 28px;
                 height: 28px;
             }
             
             body {
-                padding: 15px; /* Increased body padding */
+                padding: 15px;
             }
             
             .card {
-                padding: 18px; /* Increased padding for mobile */
+                padding: 18px;
                 margin-bottom: 15px;
             }
             
             .card-header {
-                margin-bottom: 15px; /* Increased header margin */
+                margin-bottom: 15px;
             }
             
             .container {
-                padding: 0 5px; /* Added padding to container on very small screens */
+                padding: 0 5px;
             }
             
             .summary-card {
-                padding: 15px; /* Adjusted internal padding */
+                padding: 15px;
             }
             
             .wallet-info {
-                padding: 15px; /* Adjusted internal padding */
+                padding: 15px;
             }
             
             .table-container {
-                margin-left: -5px; /* Adjust table container to account for the scrollbar */
+                margin-left: -5px;
                 margin-right: -5px;
                 width: calc(100% + 10px);
             }
@@ -447,6 +464,22 @@
                             <span class="stat-value positive" id="realizedPnL">Rp. 6.294.306</span>
                         </div>
                     </div>
+
+                    <!-- Divider for debt section -->
+                    <div class="divider"></div>
+                    
+                    <!-- Debt Section -->
+                    <div class="summary-title">Jumlah Hutang</div>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Hutang</span>
+                            <span class="stat-value negative" id="totalDebt">Rp. 0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Debt to Equity Ratio</span>
+                            <span class="stat-value" id="derRatio">0 <span class="status-indicator">Sehat</span></span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -461,6 +494,21 @@
                 </div>
                 <div class="donut-legend" id="donutLegend">
                     <!-- Legend items will be inserted here by JavaScript -->
+                </div>
+                
+                <!-- Non-Liquid Assets Section (Moved here) -->
+                <div class="summary-card">
+                    <div class="summary-title">Aset Non-Liquid</div>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Nilai</span>
+                            <span class="stat-value" id="nonLiquidAssets">Rp. 0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">% dari Total</span>
+                            <span class="stat-value" id="nonLiquidPercentage">0%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -514,7 +562,6 @@
     <script>
         // Asset data
         const assets = [
-            
             {
                 name: "Bitcoin",
                 icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Bitcoin.svg/1024px-Bitcoin.svg.png",
@@ -522,7 +569,8 @@
                 invested: 374955,
                 avgPrice: 1500000000, // Harga dalam Rupiah, dikonversi dari USD
                 currentPrice: 1390000000,  // Harga dalam Rupiah, dikonversi dari USD
-                currency: "IDR"  // Diubah menjadi IDR
+                currency: "IDR",  // Diubah menjadi IDR
+                type: "liquid"
             },
             {
                 name: "IDX: AADI",
@@ -531,7 +579,8 @@
                 invested: 671005,
                 avgPrice: 6710.05,
                 currentPrice: 6800,
-                currency: "IDR"
+                currency: "IDR",
+                type: "liquid"
             },
             {
                 name: "IDX: BMRI",
@@ -540,7 +589,8 @@
                 invested: 444666,
                 avgPrice: 4446.66,
                 currentPrice: 4410,
-                currency: "IDR"
+                currency: "IDR",
+                type: "liquid"
             },
             {
                 name: "IDX: ELSA",
@@ -549,9 +599,23 @@
                 invested: 199298,
                 avgPrice: 398.20,
                 currentPrice: 394,
-                currency: "IDR"
+                currency: "IDR",
+                type: "liquid"
+            },
+            {
+                name: "Property: Land",
+                icon: "block.png",
+                balance: 1445, // Luas dalam m²
+                invested: 7500000,
+                avgPrice: 5190.31, // Harga per m²
+                currentPrice: 13839.45, // Harga current per m²
+                currency: "IDR",
+                type: "non-liquid"
             }
         ];
+
+        // Debt data (constant)
+        const debtAmount = 0;
 
         // Format currency
         function formatCurrency(amount) {
@@ -615,6 +679,17 @@
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2
                     })} jt`;
+                } else if (asset.name === "Property: Land") {
+                    // Format untuk Property (harga per m²)
+                    currentPriceDisplay = `Rp. ${asset.currentPrice.toLocaleString('id-ID', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}/m²`;
+                    
+                    avgPriceDisplay = `Rp. ${asset.avgPrice.toLocaleString('id-ID', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    })}/m²`;
                 } else {
                     // Format untuk aset lain (dalam rupiah normal)
                     currentPriceDisplay = `Rp. ${asset.currentPrice.toLocaleString('id-ID', {
@@ -628,6 +703,16 @@
                     })}`;
                 }
                 
+                // Format balance display based on asset type
+                let balanceDisplay;
+                if (asset.name === "Bitcoin") {
+                    balanceDisplay = asset.balance.toLocaleString('id-ID', { minimumFractionDigits: 8 });
+                } else if (asset.name === "Property: Land") {
+                    balanceDisplay = `${asset.balance.toLocaleString('id-ID')} m²`;
+                } else {
+                    balanceDisplay = asset.balance.toLocaleString('id-ID', { minimumFractionDigits: 0 });
+                }
+                
                 row.innerHTML = `
                     <td>
                         <span class="asset-icon">
@@ -635,7 +720,7 @@
                         </span>
                         <span class="asset-name">${asset.name}</span>
                     </td>
-                    <td>${asset.balance.toLocaleString('id-ID', { minimumFractionDigits: asset.name === "Bitcoin" ? 8 : 0 })}</td>
+                    <td>${balanceDisplay}</td>
                     <td>${formatCurrency(asset.invested)}</td>
                     <td>${avgPriceDisplay}</td>
                     <td>${currentPriceDisplay}</td>
@@ -651,15 +736,37 @@
 
         // Calculate and display portfolio summary
         function updatePortfolioSummary(calculatedAssets) {
-            const totalInvested = calculatedAssets.reduce((sum, asset) => sum + asset.invested, 0);
-            const totalMarketValue = calculatedAssets.reduce((sum, asset) => sum + asset.marketValue, 0);
+            // Separate liquid and non-liquid assets
+            const liquidAssets = calculatedAssets.filter(asset => asset.type === "liquid");
+            const nonLiquidAssets = calculatedAssets.filter(asset => asset.type === "non-liquid");
+            
+            // Calculate totals
+            const totalLiquidInvested = liquidAssets.reduce((sum, asset) => sum + asset.invested, 0);
+            const totalLiquidMarketValue = liquidAssets.reduce((sum, asset) => sum + asset.marketValue, 0);
+            
+            const totalNonLiquidInvested = nonLiquidAssets.reduce((sum, asset) => sum + asset.invested, 0);
+            const totalNonLiquidMarketValue = nonLiquidAssets.reduce((sum, asset) => sum + asset.marketValue, 0);
+            
+            const totalInvested = totalLiquidInvested + totalNonLiquidInvested;
+            const totalMarketValue = totalLiquidMarketValue + totalNonLiquidMarketValue;
+            
             const totalPnL = totalMarketValue - totalInvested;
             const totalPercentage = (totalPnL / totalInvested) * 100;
+            
+            // Calculate DER (Debt to Equity Ratio)
+            const der = debtAmount / totalMarketValue || 0;
+            
+            // Calculate non-liquid assets percentage of total
+            const nonLiquidPercentage = (totalNonLiquidMarketValue / totalMarketValue) * 100;
             
             // Update summary values
             document.getElementById('totalEquity').textContent = formatTotalEquity(totalMarketValue);
             document.getElementById('totalInvested').textContent = formatCurrency(totalInvested);
             document.getElementById('totalPnL').textContent = `${totalPnL >= 0 ? '+ ' : '- '}${formatCurrency(Math.abs(totalPnL))}`;
+            document.getElementById('totalDebt').textContent = formatCurrency(debtAmount);
+            document.getElementById('derRatio').innerHTML = `${der.toFixed(2)} <span class="status-indicator">Sehat</span>`;
+            document.getElementById('nonLiquidAssets').textContent = formatCurrency(totalNonLiquidMarketValue);
+            document.getElementById('nonLiquidPercentage').textContent = `${nonLiquidPercentage.toFixed(2)}%`;
             
             // Realized P&L is now static and already set in HTML
             
@@ -670,7 +777,7 @@
             const pnlElement = document.getElementById('totalPnL');
             pnlElement.className = 'stat-value ' + (totalPnL >= 0 ? 'positive' : 'negative');
             
-            return { totalMarketValue, totalInvested };
+            return { totalMarketValue, totalInvested, totalLiquidMarketValue, totalNonLiquidMarketValue };
         }
 
         // Create donut chart
@@ -682,12 +789,13 @@
             const data = calculatedAssets.map(asset => asset.marketValue);
             const labels = calculatedAssets.map(asset => asset.name);
             
-            // Create colors for the chart
+            // Create elegant color palette for the chart - pastels with a modern feel
             const colors = [
-                'rgba(54, 162, 235, 0.8)',  // Blue for Bitcoin
-                'rgba(255, 159, 64, 0.8)',  // Orange for ADRO
-                'rgba(75, 192, 192, 0.8)',  // Teal for BMRI
-                'rgba(153, 102, 255, 0.8)'  // Purple for IPCC
+                'rgba(108, 99, 255, 0.8)',    // Elegant violet/purple
+                'rgba(86, 204, 242, 0.8)',    // Soft blue
+                'rgba(45, 149, 150, 0.8)',    // Teal
+                'rgba(248, 177, 149, 0.8)',   // Soft peach
+                'rgba(116, 185, 126, 0.8)'    // Mint green
             ];
             
             // Create the chart
@@ -698,14 +806,14 @@
                     datasets: [{
                         data: data,
                         backgroundColor: colors,
-                        borderColor: '#000000',
+                        borderColor: '#ffffff',
                         borderWidth: 2
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    cutout: '60%',
+                    cutout: '70%',
                     plugins: {
                         legend: {
                             display: false
@@ -734,47 +842,62 @@
                 
                 legendItem.innerHTML = `
                     <div class="legend-color" style="background-color: ${colors[index]}"></div>
-                    <div class="legend-text">${asset.name}: ${percentage}%</div>
+                    <div class="legend-text">${asset.name} (${percentage}%)</div>
                 `;
                 
                 legendContainer.appendChild(legendItem);
             });
         }
 
-        // Set the current date
-        function setCurrentDate() {
-            const now = new Date();
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('lastUpdateDate').textContent = now.toLocaleDateString('id-ID', options);
-        }
-        
-        // Generate QR Code for wallet address
-        function generateQRCode() {
-            const walletAddress = "bc1qn9fn2z22rdtuy66ta3p2he2pdhtvvkucunljgh";
-            const qrCodeElement = document.getElementById('walletQR');
+        function createWalletQR() {
+            const walletAddress = 'bc1qn9fn2z22rdtuy66ta3p2he2pdhtvvkucunljgh';
+            const qrCodeContainer = document.getElementById('walletQR');
             
-            // Create QR code with options
-            new QRCode(qrCodeElement, {
+            // Generate QR code
+            new QRCode(qrCodeContainer, {
                 text: walletAddress,
-                width: 160,
-                height: 160,
+                width: 180,
+                height: 180,
                 colorDark: "#000000",
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
         }
-
-        // Initialize the portfolio tracker
-        function initializePortfolio() {
-            setCurrentDate();
-            const calculatedAssets = populateAssetTable();
-            updatePortfolioSummary(calculatedAssets);
-            createDonutChart(calculatedAssets);
-            generateQRCode();
+        
+        // Set last update date to current date
+        function updateLastUpdate() {
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            document.getElementById('lastUpdateDate').textContent = formattedDate;
         }
-
-        // Run on page load
-        document.addEventListener('DOMContentLoaded', initializePortfolio);
+        
+        // Initialize the dashboard
+        function initializeDashboard() {
+            // Calculate asset values
+            const calculatedAssets = populateAssetTable();
+            
+            // Update portfolio summary
+            const summaryData = updatePortfolioSummary(calculatedAssets);
+            
+            // Create donut chart
+            createDonutChart(calculatedAssets);
+            
+            // Create wallet QR code
+            createWalletQR();
+            
+            // Update last update timestamp
+            updateLastUpdate();
+        }
+        
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', initializeDashboard);
     </script>
 </body>
 </html>
