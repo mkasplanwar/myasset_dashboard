@@ -329,17 +329,22 @@
             }
             
             .container {
-                gap: 10px; /* Reduced gap between cards */
+                gap: 15px; /* Slightly increased gap between cards */
+                padding: 0 5px; /* Added padding to container */
             }
             
             .card {
-                margin-bottom: 10px; /* Reduced margin between cards */
-                padding: 15px; /* Reduced padding inside cards */
+                margin-bottom: 15px; /* Adjusted margin between cards */
+                padding: 20px; /* Increased padding inside cards for more space */
             }
             
             .header-section {
-                margin-bottom: 10px; /* Reduced margin */
-                padding: 15px; /* Reduced padding */
+                margin-bottom: 15px; /* Adjusted margin */
+                padding: 20px; /* Increased padding */
+            }
+            
+            body {
+                padding: 15px; /* Increased padding from sides */
             }
         }
 
@@ -367,15 +372,34 @@
             }
             
             body {
-                padding: 10px; /* Reduced body padding */
+                padding: 15px; /* Increased body padding */
             }
             
             .card {
-                padding: 12px; /* Further reduced padding for mobile */
+                padding: 18px; /* Increased padding for mobile */
+                margin-bottom: 15px;
             }
             
             .card-header {
-                margin-bottom: 12px; /* Reduced header margin */
+                margin-bottom: 15px; /* Increased header margin */
+            }
+            
+            .container {
+                padding: 0 5px; /* Added padding to container on very small screens */
+            }
+            
+            .summary-card {
+                padding: 15px; /* Adjusted internal padding */
+            }
+            
+            .wallet-info {
+                padding: 15px; /* Adjusted internal padding */
+            }
+            
+            .table-container {
+                margin-left: -5px; /* Adjust table container to account for the scrollbar */
+                margin-right: -5px;
+                width: calc(100% + 10px);
             }
         }
     </style>
